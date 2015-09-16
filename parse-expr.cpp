@@ -58,6 +58,20 @@ is_additive_op(Token_kind k)
 }
 
 
+bool
+is_mult_op(Token_kind k)
+{
+  switch (k) {
+    case star_tok: 
+    case fslash_tok:
+    case mod_tok:
+      return true;
+    default:
+      return false;
+  }
+}
+
+
 // // stolen straight off wikipedia
 // // parse_expression_1 (lhs, min_precedence)
 // //     lookahead := peek next token
@@ -199,8 +213,17 @@ parse_term(Parser& p, Token_stream& ts)
 Expr*
 parse_mult_expr(Parser& p, Token_stream& ts, Token const* tok, Expr* e1)
 {
-  if (Expr* e2 = parse_term(p, ts))
-    return p.on_arithmetic(tok, e1, e2);
+
+  if (Expr* e2 = parse_term(p, ts)) {
+    if (Token const* t = ts.next()) {
+      if (is_mult_op(t->kind()))
+        return parse_mult_expr(p, ts, ts.advance(), p.on_arithmetic(tok, e1, e2));
+      else
+        return p.on_arithmetic(tok, e1, e2);
+    }
+    else
+      return p.on_arithmetic(tok, e1, e2);
+  }
 
   error("Expected expression after: ");
   print(e1);
@@ -222,7 +245,7 @@ parse_factor(Parser& p, Token_stream& ts)
         case star_tok: return parse_mult_expr(p, ts, ts.expect(star_tok), e1);
         case fslash_tok: return parse_mult_expr(p, ts, ts.expect(fslash_tok), e1);
         case mod_tok: return parse_mult_expr(p, ts, ts.expect(mod_tok), e1);
-        // anything else and we consider the factor a term
+        // anything else and we consider e1 a lone term
         default:
           return e1;
       }
