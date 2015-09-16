@@ -179,6 +179,7 @@ parse_paren_enclosed(Parser& p, Token_stream& ts)
       else {
         error("Expected ')' after ");
         print(e);
+        print(ts.next());
       }
     }
     // no expression after (
@@ -213,11 +214,17 @@ parse_term(Parser& p, Token_stream& ts)
 Expr*
 parse_mult_expr(Parser& p, Token_stream& ts, Token const* tok, Expr* e1)
 {
-
+  // look for the next operand
   if (Expr* e2 = parse_term(p, ts)) {
+    // if there is another operator after the term
+    // and it is a multiplicative operator
+    // then consume it.
+    // the arithmetic expr so far becomes the lhs operand
+    // and we recurse until there are no more multiplicative operators.
     if (Token const* t = ts.next()) {
       if (is_mult_op(t->kind()))
         return parse_mult_expr(p, ts, ts.advance(), p.on_arithmetic(tok, e1, e2));
+      // return once we're done eating up multiplicative operators
       else
         return p.on_arithmetic(tok, e1, e2);
     }
@@ -266,13 +273,11 @@ Expr*
 parse_additive_expr(Parser& p, Token_stream& ts, Token const* tok, Expr* e1)
 {
   if (Expr const* e2 = parse_factor(p, ts)) {
-    if (Token const* t = ts.advance()) {
+    if (Token const* t = ts.next()) {
       if (is_additive_op(t->kind()))
-        return parse_additive_expr(p, ts, t, p.on_arithmetic(tok, e1, e2));
-      else {
-        error("Unexpected operator: ");
-        print(t);
-      }
+        return parse_additive_expr(p, ts, ts.advance(), p.on_arithmetic(tok, e1, e2));
+      else
+        return p.on_arithmetic(tok, e1, e2);
     }
     else
       return p.on_arithmetic(tok, e1, e2);
@@ -298,14 +303,12 @@ parse_expr(Parser& p, Token_stream& ts)
     if (Token const* tok = ts.next()) {
       switch (tok->kind()) {
         // advance past the operator and move to parse the next expr
-        case plus_tok:  
-          return parse_additive_expr(p, ts, ts.expect(plus_tok), e1);
+        case plus_tok: 
         case minus_tok: 
-          return parse_additive_expr(p, ts, ts.expect(minus_tok), e1);
+          return parse_additive_expr(p, ts, ts.advance(), e1);
+        // ignore parenthesis
         default:
-          error("Unexpected token");
-          error(token_name(ts.next()->kind()));
-          return nullptr;
+          return e1;
       }
     }
     // no operator or rhs means end of expr
