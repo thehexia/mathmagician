@@ -61,6 +61,7 @@ struct Token_stream
 
   Token const* expect(Token_kind);
   Token const* next();
+  Token const* advance();
 
   bool eof() const { return begin_ == end_; }
 

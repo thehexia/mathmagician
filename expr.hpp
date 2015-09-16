@@ -55,6 +55,20 @@ struct Arithmetic_expr : Expr
 };
 
 
+
+inline char const*
+op_name(Arithmetic_op op)
+{
+  switch(op) {
+    case add_op: return "+";
+    case sub_op: return "-";
+    case div_op: return "/";
+    case mul_op: return "*";
+    case mod_op: return "%%";
+  }
+}
+
+
 } // namespace
 
 #endif

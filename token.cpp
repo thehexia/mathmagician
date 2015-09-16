@@ -33,7 +33,8 @@ token_name(Token_kind const k)
 Token const*
 Token_stream::expect(Token_kind k)
 {
-  assert(!eof());
+  if(eof())
+    return nullptr;  
 
   if ((*begin_).kind() == k) {
     Token const* t = &*begin_;
@@ -48,8 +49,22 @@ Token_stream::expect(Token_kind k)
 Token const*
 Token_stream::next()
 {
-  assert(!eof());
+  if(eof())
+    return nullptr;
+
   return &*begin_;
+}
+
+
+Token const*
+Token_stream::advance()
+{
+  if (eof())
+    return nullptr;
+
+  Token const* t = &*begin_;
+  begin_++;
+  return t;
 }
 
 }
