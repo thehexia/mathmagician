@@ -8,7 +8,7 @@ namespace math
 bool
 is_integer(Expr const* e)
 {
-  return dynamic_cast<Integer_expr const*>(e);
+  return dynamic_cast<Number_expr const*>(e);
 }
 
 
@@ -34,7 +34,7 @@ print(Token const* t)
 
 
 void
-print(Integer_expr const* e)
+print(Number_expr const* e)
 {
   std::cout << e->val();
 }
@@ -70,7 +70,7 @@ print(Arithmetic_expr const* e)
 void
 print(Expr const* e)
 {
-  if (Integer_expr const* ex = dynamic_cast<Integer_expr const*>(e))
+  if (Number_expr const* ex = dynamic_cast<Number_expr const*>(e))
     print(ex);
   else if (Arithmetic_expr const* ex = dynamic_cast<Arithmetic_expr const*>(e))
     print(ex);

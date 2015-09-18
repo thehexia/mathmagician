@@ -20,7 +20,7 @@ token_name(Token_kind const k)
     case mod_tok: return "mod_tok";
 
     // literal classes
-    case integer_tok: return "integer_tok";
+    case number_tok: return "number_tok";
 
     // handling error tokens
     case error_tok: return "error_tok";

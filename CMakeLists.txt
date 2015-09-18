@@ -5,7 +5,7 @@ project(mathmagician CXX)
 # C++ build flags.
 set(CMAKE_CXX_FLAGS "-std=c++11 -Wall")
 
-add_library(calc STATIC
+add_library(math STATIC
 	expr.cpp
 	evaluate-expr.cpp
 	token.cpp

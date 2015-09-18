@@ -9,6 +9,13 @@
 namespace math
 {
 
+namespace
+{
+// keeping track of bogus parens
+bool in_paren_enclosed = false;
+
+}
+
 bool
 is_binary_op(Token_kind k)
 {
@@ -61,8 +68,15 @@ is_mult_op(Token_kind k)
 Expr*
 parse_integer(Parser& p, Token_stream& ts)
 {
-  if (Token const* tok = ts.expect(integer_tok))
-    return p.on_integer(tok);
+  if (Token const* tok = ts.expect(number_tok)) {
+    if(ts.next())
+      if(ts.next()->kind() == rparen_tok && !in_paren_enclosed) {
+        error("Unexpected token ')'");
+        return nullptr;
+      }
+    return p.on_number(tok);
+  }
+
   return nullptr;
 }
 
@@ -71,14 +85,16 @@ Expr*
 parse_paren_enclosed(Parser& p, Token_stream& ts)
 {
   if (ts.expect(lparen_tok)) {
+    in_paren_enclosed = true;
     if (Expr* e = parse_expr(p, ts)) {
-      if (ts.expect(rparen_tok))
+      if (ts.expect(rparen_tok)) {
+        in_paren_enclosed = false;
         return e;
+      }
       // expected r paren fail
       else {
         error("Expected ')' after ");
         print(e);
-        print(ts.next());
       }
     }
     // no expression after (
@@ -98,7 +114,7 @@ parse_term(Parser& p, Token_stream& ts)
 {
   if (ts.next()) {
     switch (ts.next()->kind()) {
-      case integer_tok: return parse_integer(p, ts);
+      case number_tok: return parse_integer(p, ts);
       case lparen_tok: return parse_paren_enclosed(p, ts);
       default:
         return nullptr;
@@ -138,6 +154,7 @@ parse_mult_expr(Parser& p, Token_stream& ts, Token const* tok, Expr* e1)
   error("Expected expression after: ");
   print(e1);
   print(tok);
+  print("\n");
   return nullptr;
 }
 
@@ -190,7 +207,7 @@ parse_additive_expr(Parser& p, Token_stream& ts, Token const* tok, Expr* e1)
   error("Expected expression after: ");
   print(e1);
   print(tok);
-  
+  print("\n");
   return nullptr;
 }
 
@@ -209,7 +226,6 @@ parse_expr(Parser& p, Token_stream& ts)
         case plus_tok: 
         case minus_tok: 
           return parse_additive_expr(p, ts, ts.advance(), e1);
-        // ignore parenthesis
         default:
           return e1;
       }

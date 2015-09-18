@@ -7,8 +7,16 @@
 namespace math
 {
 
+// because i dont want to deal with doubles
+bool
+isnan_int(int i)
+{
+  return i == -2147483648;
+}
+
+
 int 
-evaluate(Integer_expr const* e)
+evaluate(Number_expr const* e)
 {
   return e->val();
 }
@@ -21,7 +29,7 @@ evaluate_add(Arithmetic_expr const* e)
   int lhs = evaluate(e->lhs());
   int rhs = evaluate(e->rhs());
 
-  if (std::isnan(lhs) || std::isnan(rhs))
+  if (isnan_int(lhs) || isnan_int(rhs))
     return std::nan("error");
 
   return lhs + rhs;
@@ -35,7 +43,7 @@ evaluate_sub(Arithmetic_expr const* e)
   int lhs = evaluate(e->lhs());
   int rhs = evaluate(e->rhs());
 
-  if (std::isnan(lhs) || std::isnan(rhs))
+  if (isnan_int(lhs) || isnan_int(rhs))
     return std::nan("error");
 
   return lhs - rhs;
@@ -49,7 +57,7 @@ evaluate_div(Arithmetic_expr const* e)
   int lhs = evaluate(e->lhs());
   int rhs = evaluate(e->rhs());
 
-  if (std::isnan(lhs) || std::isnan(rhs))
+  if (isnan_int(lhs) || isnan_int(rhs))
     return std::nan("error");
 
   if (rhs == 0) {
@@ -68,7 +76,7 @@ evaluate_mul(Arithmetic_expr const* e)
   int lhs = evaluate(e->lhs());
   int rhs = evaluate(e->rhs());
 
-  if (std::isnan(lhs) || std::isnan(rhs))
+  if (isnan_int(lhs) || isnan_int(rhs))
     return std::nan("error");
 
   return lhs * rhs;
@@ -82,7 +90,7 @@ evaluate_mod(Arithmetic_expr const* e)
   int lhs = evaluate(e->lhs());
   int rhs = evaluate(e->rhs());
 
-  if (std::isnan(lhs) || std::isnan(rhs))
+  if (isnan_int(lhs) || isnan_int(rhs))
     return std::nan("error");
 
   if (rhs == 0) {
@@ -115,7 +123,7 @@ evaluate(Arithmetic_expr const* e)
 int
 evaluate(Expr const* e)
 {
-  if (Integer_expr const* in = dynamic_cast<Integer_expr const*>(e))
+  if (Number_expr const* in = dynamic_cast<Number_expr const*>(e))
     return evaluate(in);
   if (Arithmetic_expr const* ar = dynamic_cast<Arithmetic_expr const*>(e))
     return evaluate(ar);

@@ -6,9 +6,9 @@ namespace math
 {
 
 Expr*
-Parser::on_integer(Token const* tok)
+Parser::on_number(Token const* tok)
 {
-  return new Integer_expr(stoi(tok->str()));
+  return new Number_expr(stoi(tok->str()));
 }
 
 

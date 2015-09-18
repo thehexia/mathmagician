@@ -4,7 +4,7 @@ namespace math
 {
 
 void
-sexpr_integer(std::ostream& os, Integer_expr const* e)
+sexpr_integer(std::ostream& os, Number_expr const* e)
 {
   os << e->val(); 
 }
@@ -25,7 +25,7 @@ sexpr_arithmetic(std::ostream& os, Arithmetic_expr const* e)
 void
 sexpr(std::ostream& os, Expr const* e)
 {
-  if (Integer_expr const* ex = dynamic_cast<Integer_expr const*>(e))
+  if (Number_expr const* ex = dynamic_cast<Number_expr const*>(e))
     sexpr_integer(os, ex);
   else if (Arithmetic_expr const* ex = dynamic_cast<Arithmetic_expr const*>(e))
     sexpr_arithmetic(os, ex);

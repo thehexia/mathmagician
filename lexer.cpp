@@ -25,21 +25,33 @@ is_digit(char const& cs)
       || cs == '9';
 }
 
+bool
+is_decimal(char const& c)
+{
+  return c == '.';
+}
+
 
 Token
 lex_number(int loc, Char_stream& cs)
 {
   String number;  
+  bool decimal = false;
+
   // consume until we no longer have a digit
   while (!cs.eof()) {
     if (is_digit(cs.peek()))
       // append exactly 1 character
       number.append(&cs.get(), 1);
+    else if (is_decimal(cs.peek()) && !decimal) {
+      decimal = true;
+      number.append(&cs.get(), 1);
+    }
     else 
       break;
   }
 
-  return Token(loc, integer_tok, number);
+  return Token(loc, number_tok, number);
 }
 
 
@@ -81,7 +93,7 @@ Lexer::lex()
         if (is_digit(cs.peek()))
           return lex_number(cs.location(), cs);
         else {
-          std::cout << "ERROR: unrecognized token: " << cs.get();
+          std::cout << "ERROR: unrecognized token: " << cs.get() << '\n';
           return Token(-1, error_tok, "error");
         }
     }

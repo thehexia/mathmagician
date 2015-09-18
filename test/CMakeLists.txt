@@ -1,6 +1,6 @@
 macro(add_test_driver target)
   add_executable(${target} ${ARGN})
-  target_link_libraries(${target} calc)
+  target_link_libraries(${target} math)
 endmacro()
 
 
@@ -10,7 +10,7 @@ add_test_driver(test-print test-print.cpp)
 add_test_driver(test-eval test-eval.cpp)
 add_test_driver(test-sexpr test-sexpr.cpp)
 add_test_driver(test-postfix test-postfix.cpp)
-
+add_test_driver(calc calc.cpp)
 
 add_test(test-lex test-lex)
 add_test(test-parse test-parse)

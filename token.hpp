@@ -22,7 +22,7 @@ enum Token_kind
   mod_tok,    // %
 
   // literal classes
-  integer_tok, // integers
+  number_tok, // integers
 
   // handling error tokens
   error_tok,

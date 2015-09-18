@@ -11,7 +11,7 @@ struct Parser
 {
   // returns on expression from parsing 
   Expr* on_arithmetic(Token const*, Expr const*, Expr const*);
-  Expr* on_integer(Token const*);
+  Expr* on_number(Token const*);
 };
 
 

@@ -4,7 +4,7 @@ namespace math
 {
 
 void
-postfix_integer(std::ostream& os, Integer_expr const* e)
+postfix_integer(std::ostream& os, Number_expr const* e)
 {
   os << e->val(); 
 }
@@ -24,7 +24,7 @@ postfix_arithmetic(std::ostream& os, Arithmetic_expr const* e)
 void
 postfix(std::ostream& os, Expr const* e)
 {
-  if (Integer_expr const* ex = dynamic_cast<Integer_expr const*>(e))
+  if (Number_expr const* ex = dynamic_cast<Number_expr const*>(e))
     postfix_integer(os, ex);
   else if (Arithmetic_expr const* ex = dynamic_cast<Arithmetic_expr const*>(e))
     postfix_arithmetic(os, ex);

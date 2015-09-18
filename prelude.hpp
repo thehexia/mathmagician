@@ -11,6 +11,7 @@ namespace math
 using String = std::string;
 
 struct Expr;
+struct Number_expr;
 struct Arithmetic_expr;
 
 } // namespace math

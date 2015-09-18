@@ -15,9 +15,9 @@ struct Expr
 
 
 // Integers
-struct Integer_expr : Expr
+struct Number_expr : Expr
 {
-  Integer_expr(int n)
+  Number_expr(int n)
     : first(n)
   { }
 
