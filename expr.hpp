@@ -10,7 +10,6 @@ namespace math
 // Base Expr cass
 struct Expr
 {
-  Expr() { }
   virtual ~Expr() { };
 };
 
@@ -64,8 +63,9 @@ op_name(Arithmetic_op op)
     case sub_op: return "-";
     case div_op: return "/";
     case mul_op: return "*";
-    case mod_op: return "%%";
+    case mod_op: return "%";
   }
+  return "error";
 }
 
 

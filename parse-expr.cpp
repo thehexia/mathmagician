@@ -22,6 +22,8 @@ is_binary_op(Token_kind k)
     default:
       return false;
   }
+
+  return false;
 }
 
 
@@ -35,6 +37,8 @@ is_additive_op(Token_kind k)
     default:
       return false;
   }
+
+  return false;
 }
 
 
@@ -49,6 +53,8 @@ is_mult_op(Token_kind k)
     default:
       return false;
   }
+
+  return false;
 }
 
 
@@ -98,6 +104,8 @@ parse_term(Parser& p, Token_stream& ts)
         return nullptr;
     }
   }
+
+  return nullptr;
 }
 
 
