@@ -8,7 +8,7 @@ namespace math
 Expr*
 Parser::on_number(Token const* tok)
 {
-  return new Number_expr(stoi(tok->str()));
+  return new Number_expr(stod(tok->str()));
 }
 
 

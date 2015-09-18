@@ -66,7 +66,7 @@ is_mult_op(Token_kind k)
 
 
 Expr*
-parse_integer(Parser& p, Token_stream& ts)
+parse_number(Parser& p, Token_stream& ts)
 {
   if (Token const* tok = ts.expect(number_tok)) {
     if(ts.next())
@@ -114,8 +114,10 @@ parse_term(Parser& p, Token_stream& ts)
 {
   if (ts.next()) {
     switch (ts.next()->kind()) {
-      case number_tok: return parse_integer(p, ts);
+      case number_tok: return parse_number(p, ts);
       case lparen_tok: return parse_paren_enclosed(p, ts);
+      // negative number
+      // case minus_tok: return parse_unary()
       default:
         return nullptr;
     }

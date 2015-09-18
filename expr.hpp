@@ -17,13 +17,13 @@ struct Expr
 // Integers
 struct Number_expr : Expr
 {
-  Number_expr(int n)
+  Number_expr(double n)
     : first(n)
   { }
 
-  int val() const { return first; }
+  double val() const { return first; }
 
-  int first;
+  double first;
 };
 
 

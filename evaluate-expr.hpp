@@ -7,7 +7,7 @@ namespace math
 {
 
 // double for future decimal support
-int evaluate(Expr const* e);
+double evaluate(Expr const* e);
 
 } // namespace math
 

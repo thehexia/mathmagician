@@ -75,7 +75,7 @@ print(Expr const* e)
   else if (Arithmetic_expr const* ex = dynamic_cast<Arithmetic_expr const*>(e))
     print(ex);
   else
-    std::cout << "NaN";
+    std::cout << "nan";
 }
 
 
