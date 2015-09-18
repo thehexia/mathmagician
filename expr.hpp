@@ -14,7 +14,7 @@ struct Expr
 };
 
 
-// Integers
+// Numbers
 struct Number_expr : Expr
 {
   Number_expr(double n)
@@ -24,6 +24,19 @@ struct Number_expr : Expr
   double val() const { return first; }
 
   double first;
+};
+
+
+// Unary negation expr
+struct Neg_expr : Expr
+{
+  Neg_expr(Expr const* e1)
+    : first(e1)
+  { }
+
+  Expr const* operand() const { return first; }
+
+  Expr const* first;
 };
 
 

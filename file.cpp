@@ -18,7 +18,9 @@ char const&
 Char_stream::get() 
 { 
   assert(!eof());
-  return *begin_++;
+  char const& c = *begin_;
+  begin_++;
+  return c;
 }
 
 

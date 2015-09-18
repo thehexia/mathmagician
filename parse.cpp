@@ -29,6 +29,14 @@ Parser::on_arithmetic(Token const* tok, Expr const* e1, Expr const* e2)
 
 
 Expr*
+Parser::on_unary(Expr const* e)
+{
+  return new Neg_expr(e);
+}
+
+
+
+Expr*
 parse(Parser& p, Token_stream& tl)
 {
   return parse_expr(p, tl);

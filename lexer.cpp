@@ -1,4 +1,5 @@
 #include "lexer.hpp"
+#include "print.hpp"
 
 #include <locale>
 #include <iostream>
@@ -78,7 +79,7 @@ Lexer::lex()
         cs.get();
         return Token(-1, error_tok, "error");
       case ' ': 
-        cs.get(); 
+        cs.get();
         break;
       // if its a single character token
       case '+': return lex_char(cs.location(), plus_tok, cs.get(), 1);
@@ -99,7 +100,6 @@ Lexer::lex()
     }
   }
 
-  std::cout << "ERROR: unrecognized token: " << cs.peek() << '\n';
   return Token(-1, error_tok, "error");
 }
 
@@ -114,8 +114,6 @@ lex(Char_stream& cs)
     Token tok = lex.lex();
     if (!is_error_tok(tok))
       tl.push_back(tok);
-    else
-      assert(is_error_tok(tok));
   }
 
   return tl;

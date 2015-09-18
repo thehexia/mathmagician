@@ -13,7 +13,6 @@ namespace
 {
 // keeping track of bogus parens
 bool in_paren_enclosed = false;
-
 }
 
 bool
@@ -95,6 +94,8 @@ parse_paren_enclosed(Parser& p, Token_stream& ts)
       else {
         error("Expected ')' after ");
         print(e);
+        print("\n");
+        return nullptr;
       }
     }
     // no expression after (
@@ -107,8 +108,24 @@ parse_paren_enclosed(Parser& p, Token_stream& ts)
 }
 
 
-// term ::= digit 
+// neg      ::= - number
+//              - ( expr )
+Expr*
+parse_neg(Parser& p, Token_stream& ts)
+{
+  // eat the minus tok
+  assert(ts.advance()->kind() == minus_tok);
+  if (Expr* e = parse_term(p, ts))
+    return p.on_unary(e);
+
+  error("Expected term after '-'.");
+  return nullptr;
+}
+
+
+// term ::= number
 //          ( expr )
+//          neg-expr
 Expr*
 parse_term(Parser& p, Token_stream& ts)
 {
@@ -117,7 +134,7 @@ parse_term(Parser& p, Token_stream& ts)
       case number_tok: return parse_number(p, ts);
       case lparen_tok: return parse_paren_enclosed(p, ts);
       // negative number
-      // case minus_tok: return parse_unary()
+      case minus_tok: return parse_neg(p, ts);
       default:
         return nullptr;
     }
@@ -237,6 +254,7 @@ parse_expr(Parser& p, Token_stream& ts)
       return e1;
   }
 
+  error("Invalid expression at beginning of input.");
   return nullptr;
 }
 
