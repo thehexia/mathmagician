@@ -9,15 +9,6 @@
 namespace math
 {
 
-namespace
-{
-// keeping track of bogus parens
-// if we're in a paren set this to true
-// then once we see the closing paren set this to false.
-// this lets us keep track of stray right parens
-bool in_paren_enclosed = false;
-}
-
 bool
 is_binary_op(Token_kind k)
 {
@@ -89,13 +80,6 @@ Expr*
 parse_number(Parser& p, Token_stream& ts)
 {
   if (Token const* tok = ts.expect(number_tok)) {
-    if(ts.next())
-      // check if there are any stray rparn at the end of expressions
-      // all expressions have to end with a number so this is a valid check
-      if(ts.next()->kind() == rparen_tok && !in_paren_enclosed) {
-        error("Unexpected token ')'");
-        return nullptr;
-      }
     return p.on_number(tok);
   }
 
@@ -109,10 +93,10 @@ Expr*
 parse_paren_enclosed(Parser& p, Token_stream& ts)
 {
   if (ts.expect(lparen_tok)) {
-    in_paren_enclosed = true;
+    // in_paren_enclosed = true;
     if (Expr* e = parse_expr(p, ts)) {
       if (ts.expect(rparen_tok)) {
-        in_paren_enclosed = false;
+        // in_paren_enclosed = false;
         return e;
       }
       // expected r paren fail
@@ -195,7 +179,7 @@ parse_mult_expr(Parser& p, Token_stream& ts, Token const* tok, Expr* e1)
       return p.on_arithmetic(tok, e1, e2);
   }
 
-  error("Expected expression after: ");
+  error("Expected expression after multiplicative expr: ");
   print(e1);
   print(tok);
   print("\n");
@@ -250,7 +234,7 @@ parse_additive_expr(Parser& p, Token_stream& ts, Token const* tok, Expr* e1)
   }
 
 
-  error("Expected expression after: ");
+  error("Expected expression after additive expr: ");
   print(e1);
   print(tok);
   print("\n");
