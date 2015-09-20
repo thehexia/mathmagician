@@ -10,7 +10,8 @@
 namespace math
 {
 
-
+// Character stream provides interface for
+// easily traversing a std::string
 struct Char_stream
 {
   using Str_it = std::string::iterator;
@@ -35,7 +36,7 @@ struct Char_stream
   Str_it end_;
 };
 
-
+// Takes a filename and reads file into a string
 String read_file(String const&);
 
 }

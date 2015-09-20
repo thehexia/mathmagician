@@ -6,6 +6,7 @@
 namespace math
 {
 
+// look at the next character in the string
 char const& 
 Char_stream::peek() const 
 { 
@@ -14,6 +15,8 @@ Char_stream::peek() const
 }
 
 
+// get the next character in the string and advance
+// one character
 char const& 
 Char_stream::get() 
 { 
@@ -25,6 +28,7 @@ Char_stream::get()
 
 
 // Return a string containing the text of the file.
+// Straight stolen from lingo
 String
 read_file(String const& p)
 {

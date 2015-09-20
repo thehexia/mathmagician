@@ -44,15 +44,18 @@ struct Token
 };
 
 
+// loc_ == -1 on error tokens
+// loc_ == -2 to handle bad spaces at end of file
 inline bool
 is_error_tok(Token const& tok)
 {
-  return tok.kind() == error_tok;
+  return tok.kind() == error_tok && tok.loc_ == -1;
 }
 
 
 using Token_list = std::vector<Token>;
 
+// Stream of tokens to easily manipulate token list
 struct Token_stream
 {
   Token_stream(Token_list& tl)

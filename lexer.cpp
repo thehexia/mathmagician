@@ -11,6 +11,8 @@ namespace math
 namespace
 {
 
+// A digit is defined as a single character between
+// 0 and 9
 bool
 is_digit(char const& cs)
 {
@@ -26,6 +28,8 @@ is_digit(char const& cs)
       || cs == '9';
 }
 
+// Function checks if we're beginning a decimal number
+// with a '.' char
 bool
 is_decimal(char const& c)
 {
@@ -33,6 +37,8 @@ is_decimal(char const& c)
 }
 
 
+// Lexing for numbers
+// this handles integers, negative numbers, and decimal numbers
 Token
 lex_number(int loc, Char_stream& cs)
 {
@@ -44,9 +50,16 @@ lex_number(int loc, Char_stream& cs)
     if (is_digit(cs.peek()))
       // append exactly 1 character
       number.append(&cs.get(), 1);
+    // check if a decimal digit has been found yet
     else if (is_decimal(cs.peek()) && !decimal) {
       decimal = true;
       number.append(&cs.get(), 1);
+    }
+    // if we get more than one decimal point '.' in the same
+    // number than bad things happened
+    else if (is_decimal(cs.peek()) && decimal) {
+      error("Stray decimal point.");
+      return Token(loc, error_tok, "error");
     }
     else 
       break;
@@ -55,7 +68,7 @@ lex_number(int loc, Char_stream& cs)
   return Token(loc, number_tok, number);
 }
 
-
+// Lex a single character
 Token
 lex_char(int loc, Token_kind k, char const& cs, int len)
 {
@@ -73,11 +86,11 @@ Lexer::lex()
 
   while (!cs.eof()) {
     switch (cs.peek()) {
-      // if its a space, consume and continue
       case '\n': 
         std::cout << "Error: unexpected newline \n";
         cs.get();
         return Token(-1, error_tok, "error");
+      // if its a space, consume and continue
       case ' ': 
         cs.get();
         break;
@@ -100,7 +113,8 @@ Lexer::lex()
     }
   }
 
-  return Token(-1, error_tok, "error");
+  // handles trailing spaces which don't end in anything
+  return Token(-2, error_tok, "eof");
 }
 
 
@@ -114,6 +128,10 @@ lex(Char_stream& cs)
     Token tok = lex.lex();
     if (!is_error_tok(tok))
       tl.push_back(tok);
+    else {
+      tl.clear();
+      return tl;
+    }
   }
 
   return tl;

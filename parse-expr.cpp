@@ -12,6 +12,9 @@ namespace math
 namespace
 {
 // keeping track of bogus parens
+// if we're in a paren set this to true
+// then once we see the closing paren set this to false.
+// this lets us keep track of stray right parens
 bool in_paren_enclosed = false;
 }
 
@@ -32,7 +35,7 @@ is_binary_op(Token_kind k)
   return false;
 }
 
-
+// '+', '-'
 bool
 is_additive_op(Token_kind k)
 {
@@ -48,6 +51,7 @@ is_additive_op(Token_kind k)
 }
 
 
+// '*', '/', '%'
 bool
 is_mult_op(Token_kind k)
 {
@@ -64,11 +68,30 @@ is_mult_op(Token_kind k)
 }
 
 
+// '(', ')'
+bool
+is_paren(Token_kind k)
+{
+  switch(k) {
+    case lparen_tok:
+    case rparen_tok:
+      return true;
+    default:
+      return false;
+  }
+
+  return false;
+}
+
+
+// Parse an integer/decimal number
 Expr*
 parse_number(Parser& p, Token_stream& ts)
 {
   if (Token const* tok = ts.expect(number_tok)) {
     if(ts.next())
+      // check if there are any stray rparn at the end of expressions
+      // all expressions have to end with a number so this is a valid check
       if(ts.next()->kind() == rparen_tok && !in_paren_enclosed) {
         error("Unexpected token ')'");
         return nullptr;
@@ -80,6 +103,8 @@ parse_number(Parser& p, Token_stream& ts)
 }
 
 
+// Parse paren enclosed expressions
+// error if no matching beginning and ending paren
 Expr*
 parse_paren_enclosed(Parser& p, Token_stream& ts)
 {
@@ -108,8 +133,7 @@ parse_paren_enclosed(Parser& p, Token_stream& ts)
 }
 
 
-// neg      ::= - number
-//              - ( expr )
+// neg      ::= - term
 Expr*
 parse_neg(Parser& p, Token_stream& ts)
 {
@@ -125,7 +149,7 @@ parse_neg(Parser& p, Token_stream& ts)
 
 // term ::= number
 //          ( expr )
-//          neg-expr
+//          neg
 Expr*
 parse_term(Parser& p, Token_stream& ts)
 {
@@ -148,7 +172,8 @@ parse_term(Parser& p, Token_stream& ts)
 //            term '/' term
 //            term '%' term
 //
-// assuming the first term has already been parsed
+// assuming the first term and operator has already been parsed
+// this parses the 'rest' of the expression
 Expr*
 parse_mult_expr(Parser& p, Token_stream& ts, Token const* tok, Expr* e1)
 {
@@ -207,7 +232,9 @@ parse_factor(Parser& p, Token_stream& ts)
 
 // add-expr ::= factor '+' factor
 //              factor '-' factor
+//
 // assuming the first expr has already been parsed
+// we start to parse the 'rest' of the expression
 Expr*
 parse_additive_expr(Parser& p, Token_stream& ts, Token const* tok, Expr* e1)
 {
@@ -241,7 +268,7 @@ parse_expr(Parser& p, Token_stream& ts)
   if (Expr* e1 = parse_factor(p, ts)) {
     if (Token const* tok = ts.next()) {
       switch (tok->kind()) {
-        // advance past the operator and move to parse the next expr
+        // advance past the operator and move to parse the 'rest' of the expr
         case plus_tok: 
         case minus_tok: 
           return parse_additive_expr(p, ts, ts.advance(), e1);
@@ -254,7 +281,6 @@ parse_expr(Parser& p, Token_stream& ts)
       return e1;
   }
 
-  error("Invalid expression at beginning of input.");
   return nullptr;
 }
 

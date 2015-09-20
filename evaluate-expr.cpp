@@ -7,21 +7,14 @@
 namespace math
 {
 
-// because i dont want to deal with doubles
-// bool
-// std::isnan(double i)
-// {
-//   return i == -2147483648;
-// }
-
-
+// if double is an integer
 bool
 is_int(double i)
 {
   return floorf(i) == i;
 }
 
-
+// evaluation of a number_expr is its double representation
 double 
 evaluate(Number_expr const* e)
 {
@@ -29,6 +22,9 @@ evaluate(Number_expr const* e)
 }
 
 
+// Evaluate the lhs and rhs
+// If either are nan then return nan
+// else return lhs + rhs
 double 
 evaluate_add(Arithmetic_expr const* e)
 {
@@ -43,6 +39,9 @@ evaluate_add(Arithmetic_expr const* e)
 }
 
 
+// Evaluate the lhs and rhs
+// If either are nan then return nan
+// else return lhs - rhs
 double 
 evaluate_sub(Arithmetic_expr const* e)
 {
@@ -57,6 +56,10 @@ evaluate_sub(Arithmetic_expr const* e)
 }
 
 
+// Evaluate the lhs and rhs
+// If either are nan then return nan
+// If rhs is 0 return nan
+// else return lhs / rhs 
 double 
 evaluate_div(Arithmetic_expr const* e)
 {
@@ -76,6 +79,9 @@ evaluate_div(Arithmetic_expr const* e)
 }
 
 
+// Evaluate the lhs and rhs
+// If either are nan then return nan
+// else return lhs * rhs
 double 
 evaluate_mul(Arithmetic_expr const* e)
 {
@@ -90,6 +96,11 @@ evaluate_mul(Arithmetic_expr const* e)
 }
 
 
+// Evaluate the lhs and rhs
+// If either are nan then return nan
+// if rhs == 0 return nan
+// if lhs || rhs are not integers return nan
+// else return lhs % rhs
 double 
 evaluate_mod(Arithmetic_expr const* e)
 {
@@ -125,12 +136,13 @@ evaluate(Arithmetic_expr const* e)
     case mod_op: return evaluate_mod(e);
   }
 
-  // error code is -1 million until i get a better solution
   error("Error: invalid operator kind.");
   return std::nan("error");
 }
 
 
+// Evaluation of a neg_expr is
+// multiplying its operand by -1
 double
 evaluate(Neg_expr const* e)
 {
@@ -138,6 +150,7 @@ evaluate(Neg_expr const* e)
 }
 
 
+// Dispatch for evaluation
 double
 evaluate(Expr const* e)
 {

@@ -18,3 +18,6 @@ add_library(math STATIC
 	postfix.cpp)
 
 add_subdirectory(test)
+
+add_executable(calc calc.cpp)
+target_link_libraries(calc math)

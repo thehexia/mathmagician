@@ -5,6 +5,7 @@
 namespace math
 {
 
+// prints the token name for debugging reasons
 const char*
 token_name(Token_kind const k)
 {
@@ -29,7 +30,8 @@ token_name(Token_kind const k)
   return "nothing_tok";
 }
 
-
+// if the next token is of kind 'k' return it
+// otherwise return nullptr
 Token const*
 Token_stream::expect(Token_kind k)
 {
@@ -46,6 +48,8 @@ Token_stream::expect(Token_kind k)
 }
 
 
+// return next token without advancing
+// return nullptr if eof
 Token const*
 Token_stream::next()
 {
@@ -55,7 +59,8 @@ Token_stream::next()
   return &*begin_;
 }
 
-
+// return next token and advance past it
+// returns nullptr if eof
 Token const*
 Token_stream::advance()
 {

@@ -1,10 +1,13 @@
 #include "parse.hpp"
 #include "parse-expr.hpp"
+#include "print.hpp"
+
 #include <iostream>
 
 namespace math
 {
 
+// Assuming the token string is a valid integer or decimal representation
 Expr*
 Parser::on_number(Token const* tok)
 {
@@ -28,6 +31,7 @@ Parser::on_arithmetic(Token const* tok, Expr const* e1, Expr const* e2)
 }
 
 
+// Handles the negative operator
 Expr*
 Parser::on_unary(Expr const* e)
 {
@@ -36,10 +40,23 @@ Parser::on_unary(Expr const* e)
 
 
 
+// Entry point to parser
 Expr*
 parse(Parser& p, Token_stream& tl)
 {
-  return parse_expr(p, tl);
+  Expr* e = parse_expr(p, tl);
+  if (Expr* unexpected = parse_expr(p, tl)) {
+    error("Unexpected expression ");
+    print(unexpected);
+    print(" after ");
+    print(e);
+    print("\n");
+    return nullptr;
+  }
+  if (!e)
+    error("Invalid expression at beginning of input.");
+
+  return e;
 }
 
 

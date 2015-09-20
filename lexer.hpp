@@ -7,7 +7,7 @@
 namespace math
 {
 
-// Lexer takes a character stream and parses it into a sequence of tokens
+// Lexer takes a character stream and transforms it into a sequence of tokens
 struct Lexer 
 {
   Lexer(Char_stream& s)
