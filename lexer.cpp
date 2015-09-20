@@ -126,8 +126,10 @@ lex(Char_stream& cs)
 
   while (!cs.eof()) {
     Token tok = lex.lex();
-    if (!is_error_tok(tok))
-      tl.push_back(tok);
+    if (!is_error_tok(tok)) {
+      if (!is_eof_tok(tok))
+        tl.push_back(tok);
+    }
     else {
       tl.clear();
       return tl;

@@ -144,6 +144,9 @@ parse_term(Parser& p, Token_stream& ts)
       // negative number
       case minus_tok: return parse_neg(p, ts);
       default:
+        print("Unable to parse term beginning with: ");
+        print(ts.next());
+        print("\n");
         return nullptr;
     }
   }

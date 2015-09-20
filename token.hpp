@@ -53,6 +53,13 @@ is_error_tok(Token const& tok)
 }
 
 
+inline bool
+is_eof_tok(Token const& tok)
+{
+  return tok.kind() == error_tok && tok.loc_ == -2;
+}
+
+
 using Token_list = std::vector<Token>;
 
 // Stream of tokens to easily manipulate token list
