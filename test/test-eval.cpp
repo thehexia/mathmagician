@@ -23,6 +23,8 @@ int main(int argc, char* argv[])
   Token_stream ts(tokens);;
 
   Parser p;
+
+  std::cout << "Parsed: \n";
   Expr* e = parse(p, ts);
   print(e);
   print("\n");
