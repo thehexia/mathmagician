@@ -22,9 +22,13 @@ Building
 
 
 `cd calc`
+
 `mkdir build`
+
 `cd build`
+
 `cmake ..`
+
 `make`
 
 After this 3 executables should be made and a bunch of test drivers will be made in `build/test`.
@@ -33,7 +37,7 @@ After this 3 executables should be made and a bunch of test drivers will be made
 `./calc2post` will run the translation from user input of left infix notation to postfix notation.
 `./calc2sexpr` will run the translation from user input of left infix notation to sexpr notation.
 
-Test executables can be run using
+Test driver executables can be run using
 
 `./test-eval <filename>`
 
