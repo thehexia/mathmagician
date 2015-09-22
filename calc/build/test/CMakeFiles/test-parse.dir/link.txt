@@ -1,1 +1,0 @@
-/usr/bin/g++-4.8   -std=c++11 -Wall   CMakeFiles/test-parse.dir/test-parse.cpp.o  -o test-parse -rdynamic ../libmath.a 

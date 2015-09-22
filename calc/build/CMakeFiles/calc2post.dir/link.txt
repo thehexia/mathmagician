@@ -1,1 +1,0 @@
-/usr/bin/g++-4.8   -std=c++11 -Wall   CMakeFiles/calc2post.dir/calc2post.cpp.o  -o calc2post -rdynamic libmath.a 
