@@ -1,0 +1,1 @@
+/usr/bin/g++-4.8   -std=c++11 -Wall   CMakeFiles/test-eval.dir/test-eval.cpp.o  -o test-eval -rdynamic ../libmath.a 

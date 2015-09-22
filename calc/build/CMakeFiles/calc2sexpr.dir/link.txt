@@ -1,0 +1,1 @@
+/usr/bin/g++-4.8   -std=c++11 -Wall   CMakeFiles/calc2sexpr.dir/calc2sexpr.cpp.o  -o calc2sexpr -rdynamic libmath.a 

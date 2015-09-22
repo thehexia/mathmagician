@@ -1,0 +1,1 @@
+/usr/bin/g++-4.8   -std=c++11 -Wall   CMakeFiles/test-sexpr.dir/test-sexpr.cpp.o  -o test-sexpr -rdynamic ../libmath.a 

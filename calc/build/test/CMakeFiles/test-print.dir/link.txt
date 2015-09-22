@@ -1,0 +1,1 @@
+/usr/bin/g++-4.8   -std=c++11 -Wall   CMakeFiles/test-print.dir/test-print.cpp.o  -o test-print -rdynamic ../libmath.a 

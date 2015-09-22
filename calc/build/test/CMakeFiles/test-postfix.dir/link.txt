@@ -1,0 +1,1 @@
+/usr/bin/g++-4.8   -std=c++11 -Wall   CMakeFiles/test-postfix.dir/test-postfix.cpp.o  -o test-postfix -rdynamic ../libmath.a 

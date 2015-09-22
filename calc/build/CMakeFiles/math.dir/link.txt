@@ -1,0 +1,2 @@
+/usr/bin/ar cq libmath.a  CMakeFiles/math.dir/expr.cpp.o CMakeFiles/math.dir/evaluate-expr.cpp.o CMakeFiles/math.dir/token.cpp.o CMakeFiles/math.dir/lexer.cpp.o CMakeFiles/math.dir/parse.cpp.o CMakeFiles/math.dir/parse-expr.cpp.o CMakeFiles/math.dir/file.cpp.o CMakeFiles/math.dir/print.cpp.o CMakeFiles/math.dir/sexpr.cpp.o CMakeFiles/math.dir/postfix.cpp.o
+/usr/bin/ranlib libmath.a
