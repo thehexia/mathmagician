@@ -1,4 +1,5 @@
-=== The Mathmagician Calculator ===
+The Mathmagician Calculator
+=======
 
 The mathmagician calculator can evaluate expressions and can translate it into sexpr and postfix notations.
 The calculator supports integers, doubles, negative numbers, unary negation, addition, subtraction, multiplication, division, modulus, and arbitrary parenthetization. Any invalid syntax will produce errors.
@@ -16,7 +17,10 @@ Directory `calc/test` contains a set of test drivers.
 3. `test-postfix.sh` will read all files from `calc/cases`, run them through the postfix translator, and output results.
 4. `test-parse.sh` will parse all files from `calc/cases`, run them through the parser, and output parse results with appropriate grouping.
 
-==== Building ===
+Building
+==========
+
+
 `cd calc`
 `mkdir build`
 `cd build`
