@@ -8,6 +8,7 @@
 namespace math
 {
 
+// prints sexpr format
 void sexpr(std::ostream&, Expr const*);
 
 } // namespace math

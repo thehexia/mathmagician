@@ -30,7 +30,7 @@ postfix_arithmetic(std::ostream& os, Arithmetic_expr const* e)
 
 
 // A special operator 'neg' must be used in
-// postfix notation. The reason is to disambiguous the
+// postfix notation. The reason is to disambiguate the
 // unary operator - with the binary operator -
 // For example, if we used the same symbol
 // -(20 + 11) - (-7 * 4) => 20 11 +- 7- 4 * -

@@ -7,7 +7,7 @@ namespace math
 {
 
 
-// Base Expr cass
+// Base Expr class
 struct Expr
 {
   virtual ~Expr() { };
@@ -15,6 +15,8 @@ struct Expr
 
 
 // Numbers
+//  integers
+//  doubles
 struct Number_expr : Expr
 {
   Number_expr(double n)
@@ -28,6 +30,8 @@ struct Number_expr : Expr
 
 
 // Unary negation expr
+// - number
+// - (expr)
 struct Neg_expr : Expr
 {
   Neg_expr(Expr const* e1)
@@ -39,7 +43,7 @@ struct Neg_expr : Expr
   Expr const* first;
 };
 
-
+// arithmetic operators
 enum Arithmetic_op
 {
   add_op,
@@ -50,7 +54,12 @@ enum Arithmetic_op
 };
 
 
-// Arithmetic operator
+// Arithmetic exprs
+// e1 + e2
+// e1 - e2
+// e1 * e2
+// e1 / e2
+// e1 % e2
 struct Arithmetic_expr : Expr
 {
   Arithmetic_expr(Arithmetic_op op, Expr const* e1, Expr const* e2)

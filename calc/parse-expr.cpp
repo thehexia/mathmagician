@@ -155,9 +155,9 @@ parse_term(Parser& p, Token_stream& ts)
 }
 
 
-// multi ::=  term '*' term
-//            term '/' term
-//            term '%' term
+// multi-rest ::=  '*' term
+//                 '/' term
+//                 '%' term
 //
 // assuming the first term and operator has already been parsed
 // this parses the 'rest' of the expression
@@ -169,7 +169,7 @@ parse_mult_expr(Parser& p, Token_stream& ts, Token const* tok, Expr* e1)
     // if there is another operator after the term
     // and it is a multiplicative operator
     // then consume it.
-    // the arithmetic expr so far becomes the lhs operand
+    // the expr so far becomes the lhs operand
     // and we recurse until there are no more multiplicative operators.
     if (Token const* t = ts.next()) {
       if (is_mult_op(t->kind()))
@@ -194,6 +194,9 @@ parse_mult_expr(Parser& p, Token_stream& ts, Token const* tok, Expr* e1)
 //            factor '/' term
 //            factor '%' term
 //            term
+//
+// or
+// factor ::= term (multi-rest)
 Expr*
 parse_factor(Parser& p, Token_stream& ts)
 {
@@ -217,16 +220,17 @@ parse_factor(Parser& p, Token_stream& ts)
 }
 
 
-// add-expr ::= factor '+' factor
-//              factor '-' factor
+// add-rest ::= '+' factor
+//              '-' factor
 //
-// assuming the first expr has already been parsed
+// assuming the first factor has already been parsed
 // we start to parse the 'rest' of the expression
 Expr*
 parse_additive_expr(Parser& p, Token_stream& ts, Token const* tok, Expr* e1)
 {
   if (Expr const* e2 = parse_factor(p, ts)) {
     if (Token const* t = ts.next()) {
+      // keep parsing the 'rest' while we still have a valid operator
       if (is_additive_op(t->kind()))
         return parse_additive_expr(p, ts, ts.advance(), p.on_arithmetic(tok, e1, e2));
       else
@@ -248,6 +252,9 @@ parse_additive_expr(Parser& p, Token_stream& ts, Token const* tok, Expr* e1)
 // expr ::= expr '+' factor
 //          expr '-' factor
 //          factor
+//
+// or
+// expr ::= factor (add-rest)
 Expr*
 parse_expr(Parser& p, Token_stream& ts)
 {

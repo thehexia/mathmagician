@@ -7,6 +7,7 @@
 namespace math
 {
 
+// constructs nodes in the AST after successful parse
 struct Parser
 {
   // returns on expression from parsing 
@@ -16,6 +17,9 @@ struct Parser
 };
 
 
+// Entry point to the parsing algorithm
+// takes a parser object which constructs nodes in the AST
+// and a token stream representing the program
 Expr* parse(Parser& p, Token_stream&);
 
 }

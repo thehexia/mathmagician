@@ -8,6 +8,7 @@
 namespace math
 {
 
+// prints postfix exprs
 void postfix(std::ostream&, Expr const*);
 
 }

@@ -45,6 +45,8 @@ Expr*
 parse(Parser& p, Token_stream& tl)
 {
   Expr* e = parse_expr(p, tl);
+  // check if there is a random extra expression after the first
+  // expression is parsed.
   if (Expr* unexpected = parse_expr(p, tl)) {
     error("Unexpected expression ");
     print(unexpected);
@@ -53,6 +55,7 @@ parse(Parser& p, Token_stream& tl)
     print("\n");
     return nullptr;
   }
+  // if no expression was parse to begin with
   if (!e)
     error("Invalid expression at beginning of input.");
 

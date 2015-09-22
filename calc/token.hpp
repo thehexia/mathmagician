@@ -28,7 +28,7 @@ enum Token_kind
   error_tok,
 };
 
-
+// Retains location, token kind, and original string in the program
 struct Token
 {
   Token(int loc, Token_kind k, String str)

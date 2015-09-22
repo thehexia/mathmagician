@@ -47,3 +47,17 @@ Test driver executables can be run using
 
 These are called by the bash scripts in the /calc directory.
 
+
+
+A note on unary negative operator
+===========
+
+A special operator 'neg' must be used in
+postfix notation. The reason is to disambiguate the
+unary operator '-'' with the binary operator '-''
+For example, if we used the same symbol
+-(20 + 11) - (-7 * 4) => 20 11 +- 7- 4 * -
+which is actually
+-((-(20 + 11) - 7) * 4)
+which is not correct.
+
