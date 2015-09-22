@@ -155,9 +155,9 @@ parse_term(Parser& p, Token_stream& ts)
 }
 
 
-// multi-rest ::=  '*' term
-//                 '/' term
-//                 '%' term
+// multi-rest ::=  '*' term (multi-rest)
+//                 '/' term (multi-rest)
+//                 '%' term (multi-rest)
 //
 // assuming the first term and operator has already been parsed
 // this parses the 'rest' of the expression
@@ -220,8 +220,8 @@ parse_factor(Parser& p, Token_stream& ts)
 }
 
 
-// add-rest ::= '+' factor
-//              '-' factor
+// add-rest ::= '+' factor (add-rest)
+//              '-' factor (add-rest)
 //
 // assuming the first factor has already been parsed
 // we start to parse the 'rest' of the expression
