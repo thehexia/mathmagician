@@ -52,14 +52,13 @@ postfix_neg(std::ostream& os, Neg_expr const* e)
 void
 postfix(std::ostream& os, Expr const* e)
 {
-  if (Number_expr const* ex = dynamic_cast<Number_expr const*>(e))
-    postfix_integer(os, ex);
-  else if (Arithmetic_expr const* ex = dynamic_cast<Arithmetic_expr const*>(e))
-    postfix_arithmetic(os, ex);
-  else if (Neg_expr const* ex = dynamic_cast<Neg_expr const*>(e))
-    postfix_neg(os, ex);
-  else
-    error("Unknown expression in postfix notation.");
+  switch (e->kind) {
+    case number_expr: return postfix_integer(os, dynamic_cast<Number_expr const*>(e));
+    case arithmetic_expr: return postfix_arithmetic(os, dynamic_cast<Arithmetic_expr const*>(e));
+    case neg_expr: return postfix_neg(os, dynamic_cast<Neg_expr const*>(e));
+  }
+
+  error("Unknown expression in postfix notation.");
 }
 
 } // namespace math

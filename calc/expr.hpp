@@ -7,10 +7,24 @@ namespace math
 {
 
 
+enum Expr_kind
+{
+  number_expr,
+  neg_expr,
+  arithmetic_expr
+};
+
+
 // Base Expr class
 struct Expr
 {
+  Expr(Expr_kind k) 
+    : kind(k)
+  { }
+
   virtual ~Expr() { };
+
+  Expr_kind kind;
 };
 
 
@@ -20,7 +34,7 @@ struct Expr
 struct Number_expr : Expr
 {
   Number_expr(double n)
-    : first(n)
+    : Expr(number_expr), first(n)
   { }
 
   double val() const { return first; }
@@ -35,7 +49,7 @@ struct Number_expr : Expr
 struct Neg_expr : Expr
 {
   Neg_expr(Expr const* e1)
-    : first(e1)
+    : Expr(neg_expr), first(e1)
   { }
 
   Expr const* operand() const { return first; }
@@ -63,7 +77,7 @@ enum Arithmetic_op
 struct Arithmetic_expr : Expr
 {
   Arithmetic_expr(Arithmetic_op op, Expr const* e1, Expr const* e2)
-    : first(op), second(e1), third(e2)
+    : Expr(arithmetic_expr), first(op), second(e1), third(e2)
   { }
 
   Arithmetic_op op() const { return first; }

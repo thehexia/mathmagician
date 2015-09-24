@@ -154,12 +154,11 @@ evaluate(Neg_expr const* e)
 double
 evaluate(Expr const* e)
 {
-  if (Number_expr const* in = dynamic_cast<Number_expr const*>(e))
-    return evaluate(in);
-  if (Arithmetic_expr const* ar = dynamic_cast<Arithmetic_expr const*>(e))
-    return evaluate(ar);
-  if (Neg_expr const* neg = dynamic_cast<Neg_expr const*>(e))
-    return evaluate(neg);
+  switch (e->kind) {
+    case number_expr: return evaluate(dynamic_cast<Number_expr const*>(e));
+    case arithmetic_expr: return evaluate(dynamic_cast<Arithmetic_expr const*>(e));
+    case neg_expr: return evaluate(dynamic_cast<Neg_expr const*>(e));
+  }
 
   // error code is -1 million until i get a better solution
   error("Error: invalid expression kind.");

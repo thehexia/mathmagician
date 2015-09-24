@@ -43,12 +43,12 @@ sexpr_neg(std::ostream& os, Neg_expr const* e)
 void
 sexpr(std::ostream& os, Expr const* e)
 {
-  if (Number_expr const* ex = dynamic_cast<Number_expr const*>(e))
-    sexpr_integer(os, ex);
-  else if (Arithmetic_expr const* ex = dynamic_cast<Arithmetic_expr const*>(e))
-    sexpr_arithmetic(os, ex);
-  else if (Neg_expr const* ex = dynamic_cast<Neg_expr const*>(e))
-    sexpr_neg(os, ex);
+  switch (e->kind) {
+    case number_expr: return sexpr_integer(os, dynamic_cast<Number_expr const*>(e));
+    case arithmetic_expr: return sexpr_arithmetic(os, dynamic_cast<Arithmetic_expr const*>(e));
+    case neg_expr: return sexpr_neg(os, dynamic_cast<Neg_expr const*>(e));
+  }
+  error("Unknown expression in sexpr notation.");
 }
 
 } // namespace math
