@@ -13,17 +13,9 @@ add_library(math STATIC
 	parse.cpp
 	parse-expr.cpp
 	file.cpp
-	print.cpp
-	sexpr.cpp
-	postfix.cpp)
+	print.cpp)
 
 add_subdirectory(test)
 
 add_executable(calc calc.cpp)
 target_link_libraries(calc math)
-
-add_executable(calc2sexpr calc2sexpr.cpp)
-target_link_libraries(calc2sexpr math)
-
-add_executable(calc2post calc2post.cpp)
-target_link_libraries(calc2post math)
