@@ -9,6 +9,7 @@ add_library(math STATIC
 	expr.cpp
 	evaluate-expr.cpp
 	token.cpp
+	symbol.cpp
 	lexer.cpp
 	parse.cpp
 	parse-expr.cpp

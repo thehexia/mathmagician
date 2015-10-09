@@ -1,6 +1,7 @@
 #include "parse.hpp"
 #include "parse-expr.hpp"
 #include "print.hpp"
+#include "symbol.hpp"
 
 #include <iostream>
 
@@ -11,7 +12,7 @@ namespace math
 Expr*
 Parser::on_number(Token const* tok)
 {
-  return new Number_expr(stod(tok->str()));
+  return new Number_expr(tok->symbol()->value());
 }
 
 

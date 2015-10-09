@@ -9,6 +9,8 @@
 namespace math
 {
 
+struct Symbol;
+
 enum Token_kind
 {
   lparen_tok, // (
@@ -22,41 +24,45 @@ enum Token_kind
   mod_tok,    // %
 
   // literal classes
-  number_tok, // integers
+  number_tok, // numbers
+  bool_tok,   // true / false
 
   // handling error tokens
   error_tok,
+  eof_tok,
 };
 
 // Retains location, token kind, and original string in the program
 struct Token
 {
-  Token(int loc, Token_kind k, String str)
-    : loc_(loc), kind_(k), str_(str)
+  Token(int loc, Symbol const* sym)
+    : loc_(loc), sym_(sym)
   { }
 
-  Token_kind kind() const { return kind_; }
-  String const str() const { return str_; }
+  Token_kind kind() const;
+
+  Symbol const* symbol() const;
+  String const* str() const;
 
   int loc_;
-  Token_kind kind_;
-  String str_;
+  Symbol const* sym_;
 };
 
 
 // loc_ == -1 on error tokens
-// loc_ == -2 to handle bad spaces at end of file
+
 inline bool
 is_error_tok(Token const& tok)
 {
-  return tok.kind() == error_tok && tok.loc_ == -1;
+  return tok.kind() == error_tok;
 }
 
 
+// loc_ == -2 to handle bad spaces at end of file
 inline bool
 is_eof_tok(Token const& tok)
 {
-  return tok.kind() == error_tok && tok.loc_ == -2;
+  return tok.kind() == eof_tok;
 }
 
 
@@ -84,6 +90,8 @@ struct Token_stream
 Token const* expect(Token_list&, Token_kind);
 
 char const* token_name(Token_kind const);
+
+void install_tokens();
 
 
 } // namespace math

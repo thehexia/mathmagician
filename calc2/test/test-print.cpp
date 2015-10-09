@@ -9,6 +9,7 @@ using namespace math;
 
 int main()
 {
+  
   Number_expr* e1 = new Number_expr(1);
   Number_expr* e2 = new Number_expr(2);
 

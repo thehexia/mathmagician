@@ -1,9 +1,15 @@
 #include "token.hpp"
+#include "symbol.hpp"
 
 #include <cassert>
 
 namespace math
 {
+
+// Token member definitions
+Token_kind Token::kind() const { return sym_->kind(); }
+Symbol const* Token::symbol() const { return sym_; }
+String const* Token::str() const { return sym_->str(); }
 
 // prints the token name for debugging reasons
 const char*
@@ -22,9 +28,11 @@ token_name(Token_kind const k)
 
     // literal classes
     case number_tok: return "number_tok";
+    case bool_tok: return "bool_tok";
 
     // handling error tokens
     case error_tok: return "error_tok";
+    case eof_tok: return "eof_tok";
   }
 
   return "nothing_tok";
@@ -72,4 +80,24 @@ Token_stream::advance()
   return t;
 }
 
+
+void
+install_tokens()
+{
+  install_symbol(lparen_tok, "("); // (
+  install_symbol(rparen_tok, ")"); // )
+
+  // operators
+  install_symbol(plus_tok, "+");   // +
+  install_symbol(minus_tok, "-");  // -
+  install_symbol(star_tok, "*");   // *
+  install_symbol(fslash_tok, "/"); // /
+  install_symbol(mod_tok, "%");    // %
+
+  // handling error tokens
+  install_symbol(error_tok, "1err");
+  install_symbol(eof_tok, "2eof");
 }
+
+
+} // namespace math

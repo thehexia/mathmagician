@@ -19,7 +19,7 @@ inline void
 print(Token_list& tl)
 {
   for (auto it : tl) {
-    std::cout << "[\'" + it.str() + "\'] " + token_name(it.kind()) + "\n"; 
+    std::cout << "[\'" + *it.str() + "\'] " + token_name(it.kind()) + "\n"; 
   }
 }
 

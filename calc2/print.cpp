@@ -29,7 +29,7 @@ print(char const* c)
 void
 print(Token const* t)
 {
-  std::cout << t->str() << ' ';
+  std::cout << *t->str() << ' ';
 }
 
 

@@ -21,6 +21,8 @@ input(String& in)
 
 int main(int argc, char* argv[])
 {
+  install_tokens();
+
   String line;
 
   while(input(line)) {

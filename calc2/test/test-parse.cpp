@@ -10,6 +10,8 @@ using namespace math;
 
 int main(int argc, char* argv[])
 {
+  install_tokens();
+
   if (argc < 2) {
     std::cout << "invalid arguments\n";
     return -1;

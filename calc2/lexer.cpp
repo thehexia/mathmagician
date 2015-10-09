@@ -1,9 +1,11 @@
 #include "lexer.hpp"
+#include "symbol.hpp"
 #include "print.hpp"
 
 #include <locale>
 #include <iostream>
 #include <cassert>
+#include <cctype>
 
 namespace math
 {
@@ -16,16 +18,7 @@ namespace
 bool
 is_digit(char const& cs)
 {
-  return cs == '0'
-      || cs == '1'
-      || cs == '2'
-      || cs == '3'
-      || cs == '4'
-      || cs == '5'
-      || cs == '6'
-      || cs == '7'
-      || cs == '8'
-      || cs == '9';
+  return std::isdigit(cs);
 }
 
 // Function checks if we're beginning a decimal number
@@ -59,20 +52,22 @@ lex_number(int loc, Char_stream& cs)
     // number than bad things happened
     else if (is_decimal(cs.peek()) && decimal) {
       error("Stray decimal point.");
-      return Token(loc, error_tok, "error");
+      return Token(loc, get_symbol("1err"));
     }
     else 
       break;
   }
 
-  return Token(loc, number_tok, number);
+  install_symbol(number_tok, number);
+  return Token(loc, get_symbol(number));
 }
+
 
 // Lex a single character
 Token
-lex_char(int loc, Token_kind k, char const& cs, int len)
+lex_char(int loc, char const cs)
 {
-  return Token(loc, k, String(len, cs));
+  return Token(loc, get_symbol(String(1, cs)));
 }
 
 
@@ -89,32 +84,33 @@ Lexer::lex()
       case '\n': 
         std::cout << "Error: unexpected newline \n";
         cs.get();
-        return Token(-1, error_tok, "error");
+        return Token(-1, get_symbol("1err"));
       // if its a space, consume and continue
       case ' ': 
         cs.get();
         break;
       // if its a single character token
-      case '+': return lex_char(cs.location(), plus_tok, cs.get(), 1);
-      case '-': return lex_char(cs.location(), minus_tok, cs.get(), 1);
-      case '*': return lex_char(cs.location(), star_tok, cs.get(), 1);
-      case '/': return lex_char(cs.location(), fslash_tok, cs.get(), 1);
-      case '%': return lex_char(cs.location(), mod_tok, cs.get(), 1);
-      case '(': return lex_char(cs.location(), lparen_tok, cs.get(), 1);
-      case ')': return lex_char(cs.location(), rparen_tok, cs.get(), 1);
+      case '+':
+      case '-':
+      case '*':
+      case '/':
+      case '%': 
+      case '(':
+      case ')':
+        return lex_char(cs.location(), cs.get());
       default:  
         // if its none of those then it has to be a number or identifier
         if (is_digit(cs.peek()))
           return lex_number(cs.location(), cs);
         else {
           std::cout << "ERROR: unrecognized token: " << cs.get() << '\n';
-          return Token(-1, error_tok, "error");
+          return Token(-1, get_symbol("1err"));
         }
     }
   }
 
   // handles trailing spaces which don't end in anything
-  return Token(-2, error_tok, "eof");
+  return Token(-2, get_symbol("2eof"));
 }
 
 
