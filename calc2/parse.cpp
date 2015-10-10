@@ -18,14 +18,14 @@ Parser::on_number(Token const* tok)
 
 // Assuming the token is the arithmetic operator
 Expr*
-Parser::on_arithmetic(Token const* tok, Expr const* e1, Expr const* e2)
+Parser::on_binary(Token const* tok, Expr const* e1, Expr const* e2)
 {
   switch (tok->kind()) {
-    case plus_tok: return new Arithmetic_expr(add_op, e1, e2);
-    case minus_tok: return new Arithmetic_expr(sub_op, e1, e2);
-    case star_tok: return new Arithmetic_expr(mul_op, e1, e2);
-    case fslash_tok: return new Arithmetic_expr(div_op, e1, e2);
-    case mod_tok: return new Arithmetic_expr(mod_op, e1, e2);
+    case plus_tok: return new Binary_expr(add_op, e1, e2);
+    case minus_tok: return new Binary_expr(sub_op, e1, e2);
+    case star_tok: return new Binary_expr(mul_op, e1, e2);
+    case fslash_tok: return new Binary_expr(div_op, e1, e2);
+    case mod_tok: return new Binary_expr(mod_op, e1, e2);
     default:
       return nullptr;
   }
@@ -36,7 +36,7 @@ Parser::on_arithmetic(Token const* tok, Expr const* e1, Expr const* e2)
 Expr*
 Parser::on_unary(Expr const* e)
 {
-  return new Neg_expr(e);
+  return new Unary_expr(e);
 }
 
 

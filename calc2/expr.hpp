@@ -10,8 +10,9 @@ namespace math
 enum Expr_kind
 {
   number_expr,
-  neg_expr,
-  arithmetic_expr
+  bool_expr,
+  unary_expr,
+  binary_expr
 };
 
 
@@ -43,13 +44,33 @@ struct Number_expr : Expr
 };
 
 
-// Unary negation expr
-// - number
-// - (expr)
-struct Neg_expr : Expr
+struct Bool_expr : Expr
 {
-  Neg_expr(Expr const* e1)
-    : Expr(neg_expr), first(e1)
+  Bool_expr(bool b)
+    : Expr(bool_expr), first(b)
+  { }
+
+  bool value() const { return first; }
+
+  bool first;
+};
+
+
+enum Unary_op
+{
+  neg_op,
+  pos_op,
+  not_op,
+};
+
+
+// Unary negation expr
+// -/+/! number
+// -/+/! (expr)
+struct Unary_expr : Expr
+{
+  Unary_expr(Expr const* e1)
+    : Expr(unary_expr), first(e1)
   { }
 
   Expr const* operand() const { return first; }
@@ -58,7 +79,7 @@ struct Neg_expr : Expr
 };
 
 // arithmetic operators
-enum Arithmetic_op
+enum Binary_op
 {
   add_op,
   sub_op,
@@ -74,17 +95,17 @@ enum Arithmetic_op
 // e1 * e2
 // e1 / e2
 // e1 % e2
-struct Arithmetic_expr : Expr
+struct Binary_expr : Expr
 {
-  Arithmetic_expr(Arithmetic_op op, Expr const* e1, Expr const* e2)
-    : Expr(arithmetic_expr), first(op), second(e1), third(e2)
+  Binary_expr(Binary_op op, Expr const* e1, Expr const* e2)
+    : Expr(binary_expr), first(op), second(e1), third(e2)
   { }
 
-  Arithmetic_op op() const { return first; }
+  Binary_op op() const { return first; }
   Expr const* lhs() const { return second; }
   Expr const* rhs() const { return third; }
 
-  Arithmetic_op first;
+  Binary_op first;
   Expr const* second;
   Expr const* third;
 };
@@ -92,7 +113,7 @@ struct Arithmetic_expr : Expr
 
 
 inline char const*
-op_name(Arithmetic_op op)
+op_name(Binary_op op)
 {
   switch(op) {
     case add_op: return "+";

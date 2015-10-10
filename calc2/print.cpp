@@ -50,7 +50,7 @@ print_paren_enclosed(Expr const* e)
 
 
 void
-print(Arithmetic_expr const* e)
+print(Binary_expr const* e)
 {
   if(is_integer(e->lhs()))
     print(e->lhs());
@@ -68,7 +68,7 @@ print(Arithmetic_expr const* e)
 
 
 void
-print(Neg_expr const* e)
+print(Unary_expr const* e)
 {
   std::cout << "-(";
   print(e->operand());
@@ -81,9 +81,9 @@ print(Expr const* e)
 {
   if (Number_expr const* ex = dynamic_cast<Number_expr const*>(e))
     print(ex);
-  else if (Arithmetic_expr const* ex = dynamic_cast<Arithmetic_expr const*>(e))
+  else if (Binary_expr const* ex = dynamic_cast<Binary_expr const*>(e))
     print(ex);
-  else if (Neg_expr const* ex = dynamic_cast<Neg_expr const*>(e))
+  else if (Unary_expr const* ex = dynamic_cast<Unary_expr const*>(e))
     print(ex);
   else
     std::cout << "nan";

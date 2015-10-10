@@ -22,6 +22,7 @@ struct Char_stream
 
   char const& peek() const;
   char const& get();
+  char const* peek_n(int n) const;
 
   bool eof() const { return begin_ == end_; }
 

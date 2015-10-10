@@ -1,4 +1,5 @@
 #include "symbol.hpp"
+#include <stdexcept>
 
 namespace math
 {
@@ -28,7 +29,13 @@ install_symbol(Token_kind k, String s)
 Symbol const* 
 get_symbol(String const s)
 {
-  return table.find(s);
+  auto search = table.find(s);
+
+  if (search) {
+    return search;
+  }
+  
+  return nullptr;
 }
 
 

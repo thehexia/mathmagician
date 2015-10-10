@@ -26,7 +26,7 @@ evaluate(Number_expr const* e)
 // If either are nan then return nan
 // else return lhs + rhs
 double 
-evaluate_add(Arithmetic_expr const* e)
+evaluate_add(Binary_expr const* e)
 {
   assert(e->op() == add_op);
   double lhs = evaluate(e->lhs());
@@ -43,7 +43,7 @@ evaluate_add(Arithmetic_expr const* e)
 // If either are nan then return nan
 // else return lhs - rhs
 double 
-evaluate_sub(Arithmetic_expr const* e)
+evaluate_sub(Binary_expr const* e)
 {
   assert(e->op() == sub_op);
   double lhs = evaluate(e->lhs());
@@ -61,7 +61,7 @@ evaluate_sub(Arithmetic_expr const* e)
 // If rhs is 0 return nan
 // else return lhs / rhs 
 double 
-evaluate_div(Arithmetic_expr const* e)
+evaluate_div(Binary_expr const* e)
 {
   assert(e->op() == div_op);
   double lhs = evaluate(e->lhs());
@@ -83,7 +83,7 @@ evaluate_div(Arithmetic_expr const* e)
 // If either are nan then return nan
 // else return lhs * rhs
 double 
-evaluate_mul(Arithmetic_expr const* e)
+evaluate_mul(Binary_expr const* e)
 {
   assert(e->op() == mul_op);
   double lhs = evaluate(e->lhs());
@@ -102,7 +102,7 @@ evaluate_mul(Arithmetic_expr const* e)
 // if lhs || rhs are not integers return nan
 // else return lhs % rhs
 double 
-evaluate_mod(Arithmetic_expr const* e)
+evaluate_mod(Binary_expr const* e)
 {
   assert(e->op() == mod_op);
   double lhs = evaluate(e->lhs());
@@ -126,7 +126,7 @@ evaluate_mod(Arithmetic_expr const* e)
 
 // Any invalid operators result in undefined behavior
 double 
-evaluate(Arithmetic_expr const* e)
+evaluate(Binary_expr const* e)
 {
   switch (e->op()) {
     case add_op: return evaluate_add(e);
@@ -144,7 +144,7 @@ evaluate(Arithmetic_expr const* e)
 // Evaluation of a neg_expr is
 // multiplying its operand by -1
 double
-evaluate(Neg_expr const* e)
+evaluate(Unary_expr const* e)
 {
   return -1 * evaluate(e->operand());
 }
@@ -156,8 +156,8 @@ evaluate(Expr const* e)
 {
   switch (e->kind) {
     case number_expr: return evaluate(dynamic_cast<Number_expr const*>(e));
-    case arithmetic_expr: return evaluate(dynamic_cast<Arithmetic_expr const*>(e));
-    case neg_expr: return evaluate(dynamic_cast<Neg_expr const*>(e));
+    case binary_expr: return evaluate(dynamic_cast<Binary_expr const*>(e));
+    case unary_expr: return evaluate(dynamic_cast<Unary_expr const*>(e));
   }
 
   // error code is -1 million until i get a better solution

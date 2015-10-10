@@ -30,6 +30,18 @@ is_decimal(char const& c)
 }
 
 
+bool is_alpha(char const& c)
+{
+  return std::isalpha(c);
+}
+
+
+bool is_identifier_rest(char const& c)
+{
+  return std::isalpha(c) || std::isdigit(c);
+}
+
+
 // Lexing for numbers
 // this handles integers, negative numbers, and decimal numbers
 Token
@@ -58,8 +70,42 @@ lex_number(int loc, Char_stream& cs)
       break;
   }
 
+  // install then get
   install_symbol(number_tok, number);
   return Token(loc, get_symbol(number));
+}
+
+
+Token
+lex_identifier(int loc, Char_stream& cs)
+{
+  assert(is_alpha(cs.peek()));
+
+  String id;
+  id.append(&cs.get(), 1);
+
+  while (!cs.eof()) {
+    // if the next char is part of the identifier
+    if (is_identifier_rest(cs.peek())) {
+      id.append(&cs.get(), 1);
+    }
+    // if it is no longer an id char
+    else
+      break;
+  }
+
+  // look things up in the symbol table
+  Symbol const* sym = get_symbol(id);
+
+  // if it exists
+  if (sym) {
+    return Token(loc, sym);
+  }
+  else {
+    install_symbol(identifier_tok, id);
+    assert(get_symbol(id));
+    return Token(loc, get_symbol(id));
+  }
 }
 
 
@@ -69,6 +115,38 @@ lex_char(int loc, char const cs)
 {
   return Token(loc, get_symbol(String(1, cs)));
 }
+
+
+bool
+nth_char_is(Char_stream& cs, int n, char c)
+{
+  if(char const* nth = cs.peek_n(n))
+    return *nth == c;
+
+  return false;
+}
+
+
+// Attempts to lex a digraph
+// If fails, lexes a monograph
+Token
+lex_digraph(int loc, Char_stream& cs, char digraph)
+{
+  char const& f = cs.get();
+  if (!cs.eof()) {
+    String s;
+    s.append(&f, 1);
+    // check next char
+    if (cs.peek() == digraph) {
+      s.append(&cs.get(), 1);
+      if (Symbol const* sym = get_symbol(s))
+        return Token(loc, sym);
+    }
+  }
+
+  return Token(loc, get_symbol("1err"));
+}
+
 
 
 } // namespace
@@ -98,10 +176,44 @@ Lexer::lex()
       case '(':
       case ')':
         return lex_char(cs.location(), cs.get());
+      case '&':
+        if (nth_char_is(cs, 1, '&'))
+          return lex_digraph(cs.location(), cs, '&');
+        else
+          return lex_char(cs.location(), cs.get());
+      case '|':
+        if (nth_char_is(cs, 1, '|'))
+          return lex_digraph(cs.location(), cs, '|');
+        else
+          return lex_char(cs.location(), cs.get());
+      case '<':
+        if (nth_char_is(cs, 1, '='))
+          return lex_digraph(cs.location(), cs, '=');
+        else
+          return lex_char(cs.location(), cs.get());
+      case '>':
+        if (nth_char_is(cs, 1, '='))
+          return lex_digraph(cs.location(), cs, '=');
+        else
+          return lex_char(cs.location(), cs.get());
+      case '=':
+        if (nth_char_is(cs, 1, '='))
+          return lex_digraph(cs.location(), cs, '=');
+        else
+          return lex_char(cs.location(), cs.get());
+      case '!':
+        if (nth_char_is(cs, 1, '='))
+          return lex_digraph(cs.location(), cs, '=');
+        else
+          return lex_char(cs.location(), cs.get());
+
       default:  
-        // if its none of those then it has to be a number or identifier
+        // if it starts with a digit we assume its a number
         if (is_digit(cs.peek()))
           return lex_number(cs.location(), cs);
+        // if it starts with an alpha character it is a keyword or an id
+        else if(is_alpha(cs.peek()))
+          return lex_identifier(cs.location(), cs);
         else {
           std::cout << "ERROR: unrecognized token: " << cs.get() << '\n';
           return Token(-1, get_symbol("1err"));

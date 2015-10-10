@@ -27,6 +27,16 @@ Char_stream::get()
 }
 
 
+char const*
+Char_stream::peek_n(int n) const
+{
+  if (begin_ + n != end_);
+    return &*(begin_ + n);
+
+  return nullptr;
+}
+
+
 // Return a string containing the text of the file.
 // Straight stolen from lingo
 String

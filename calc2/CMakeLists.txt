@@ -7,6 +7,7 @@ set(CMAKE_CXX_FLAGS "-std=c++11 -Wall")
 
 add_library(math STATIC
 	expr.cpp
+	type.cpp
 	evaluate-expr.cpp
 	token.cpp
 	symbol.cpp

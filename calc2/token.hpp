@@ -16,16 +16,31 @@ enum Token_kind
   lparen_tok, // (
   rparen_tok, // )
 
-  // operators
+  // arithmetic operators
   plus_tok,   // +
   minus_tok,  // -
   star_tok,   // *
   fslash_tok, // /
   mod_tok,    // %
 
+  // relational operator
+  eq_eq_tok,   // ==
+  bang_eq_tok, // !=
+  less_tok,    // <
+  less_eq_tok, // <=
+  great_tok,   // >
+  great_eq_tok,// >=
+
+  // logical operators
+  log_and_tok, // &&
+  log_or_tok,  // ||
+  bang_tok,   // !
+
   // literal classes
   number_tok, // numbers
   bool_tok,   // true / false
+
+  identifier_tok, // identifiers
 
   // handling error tokens
   error_tok,
