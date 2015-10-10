@@ -11,8 +11,9 @@ int precedence(Token_kind);
 
 // parsing terms in the language
 Expr* parse_paren_enclosed(Parser&, Token_stream&);
-Expr* parse_binary(Parser&, Token_stream&);
+Expr* parse_binary_expr(Parser&, Token_stream&);
 Expr* parse_number(Parser&, Token_stream&);
+Expr* parse_bool(Parser&, Token_stream&);
 Expr* parse_primary_expr(Parser&, Token_stream&);
 Expr* parse_unary_expr(Parser&, Token_stream&);
 

@@ -16,6 +16,13 @@ Parser::on_number(Token const* tok)
 }
 
 
+Expr*
+Parser::on_bool(Token const* tok)
+{
+  return (*tok->str() == "true") ? new Bool_expr(true) : new Bool_expr(false);
+}
+
+
 // Assuming the token is the arithmetic operator
 Expr*
 Parser::on_binary(Token const* tok, Expr const* e1, Expr const* e2)
@@ -26,6 +33,7 @@ Parser::on_binary(Token const* tok, Expr const* e1, Expr const* e2)
     case star_tok: return new Binary_expr(mul_op, e1, e2);
     case fslash_tok: return new Binary_expr(div_op, e1, e2);
     case mod_tok: return new Binary_expr(mod_op, e1, e2);
+    case log_or_tok: return new Binary_expr(lor_op, e1, e2);
     default:
       return nullptr;
   }

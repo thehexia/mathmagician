@@ -87,6 +87,18 @@ parse_number(Parser& p, Token_stream& ts)
 }
 
 
+// Parse true/false
+Expr*
+parse_bool(Parser& p, Token_stream& ts)
+{
+  if (Token const* tok = ts.expect(bool_tok)) {
+    return p.on_bool(tok);
+  }
+
+  return nullptr;
+}
+
+
 // Parse paren enclosed expressions
 // error if no matching beginning and ending paren
 Expr*
@@ -128,6 +140,7 @@ parse_primary_expr(Parser& p, Token_stream& ts)
     switch (ts.next()->kind()) {
       case number_tok: return parse_number(p, ts);
       case lparen_tok: return parse_paren_enclosed(p, ts);
+      case bool_tok: return parse_bool(p, ts);
       // // negative number
       // case minus_tok: return parse_neg(p, ts);
       default:
@@ -202,6 +215,8 @@ parse_unary_expr(Parser& p, Token_stream& ts)
         return parse_primary_expr(p, ts);
     }
   }
+
+  return nullptr;
 }
 
 
@@ -330,9 +345,158 @@ parse_add_expr(Parser& p, Token_stream& ts)
 
 
 Expr*
+parse_order_rest(Parser& p, Token_stream& ts, Token const* tok, Expr* e1)
+{
+  return nullptr;
+}
+
+
+// order_expr < | <= | > | >= add_expr
+// add_expr
+//
+// add_expr (order_rest)
+Expr*
+parse_order_expr(Parser& p, Token_stream& ts)
+{
+  if (Expr* e1 = parse_add_expr(p, ts)) {
+    if (Token const* tok = ts.next()) {
+      switch (tok->kind()) {
+        // advance past the operator and move to parse the 'rest' of the expr
+        case less_tok: 
+        case less_eq_tok:
+        case great_tok:
+        case great_eq_tok:
+          return parse_order_rest(p, ts, ts.advance(), e1);
+        default:
+          return e1;
+      }
+    }
+
+    return e1;
+  }
+
+  return nullptr;
+}
+
+
+Expr*
+parse_eq_rest(Parser& p, Token_stream& ts, Token const* tok, Expr* e1)
+{
+  return nullptr;
+}
+
+
+// eq_expr == | != order_expr
+// order_expr
+//
+// order_expr (eq_rest)
+Expr*
+parse_eq_expr(Parser& p, Token_stream& ts)
+{
+  if (Expr* e1 = parse_order_expr(p, ts)) {
+    if (Token const* tok = ts.next()) {
+      switch (tok->kind()) {
+        // advance past the operator and move to parse the 'rest' of the expr
+        case eq_eq_tok:
+        case bang_eq_tok:
+          return parse_eq_rest(p, ts, ts.advance(), e1);
+        default:
+          return e1;
+      }
+    }
+
+    return e1;
+  }
+
+  return nullptr;
+}
+
+
+Expr*
+parse_log_and_rest(Parser& p, Token_stream& ts, Token const* tok, Expr* e1)
+{
+  return nullptr;
+}
+
+
+// log_and_expr && order_expr
+// order_expr
+//
+// order_expr (log_and_expr)
+Expr*
+parse_log_and_expr(Parser& p, Token_stream& ts)
+{
+  if (Expr* e1 = parse_eq_expr(p, ts)) {
+    if (Token const* tok = ts.next()) {
+      switch (tok->kind()) {
+        // advance past the operator and move to parse the 'rest' of the expr
+        case log_and_tok: 
+          return parse_log_and_rest(p, ts, ts.advance(), e1);
+        default:
+          return e1;
+      }
+    }
+
+    return e1;
+  }
+
+  return nullptr;
+}
+
+
+Expr*
+parse_log_or_rest(Parser& p, Token_stream& ts, Token const* tok, Expr* e1)
+{
+  if (Expr const* e2 = parse_log_and_expr(p, ts)) {
+    if (Token const* t = ts.next()) {
+      // keep parsing the 'rest' while we still have a valid operator
+      if (t->kind() == log_or_tok)
+        return parse_log_or_rest(p, ts, ts.advance(), p.on_binary(tok, e1, e2));
+      else
+        return p.on_binary(tok, e1, e2);
+    }
+    
+    return p.on_binary(tok, e1, e2);
+  }
+
+
+  error("Expected expression after logical-or expr: ");
+  print(e1);
+  print(tok);
+  print("\n");
+  return nullptr;
+}
+
+
+// log_or_expr || log_and_expr
+// log_and_expr
+//
+// log_and_expr (log_or_rest)
+Expr*
+parse_log_or_expr(Parser& p, Token_stream& ts)
+{
+  if (Expr* e1 = parse_log_and_expr(p, ts)) {
+    if (Token const* tok = ts.next()) {
+      switch (tok->kind()) {
+        // advance past the operator and move to parse the 'rest' of the expr
+        case log_or_tok: 
+          return parse_log_or_rest(p, ts, ts.advance(), e1);
+        default:
+          return e1;
+      }
+    }
+
+    return e1;
+  }
+
+  return nullptr;
+}
+
+
+Expr*
 parse_expr(Parser& p, Token_stream& ts)
 {
-  return parse_add_expr(p, ts);
+  return parse_log_or_expr(p, ts);
 }
 
 

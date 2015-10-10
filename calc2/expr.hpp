@@ -86,6 +86,14 @@ enum Binary_op
   div_op,
   mul_op,
   mod_op,
+  lor_op,
+  land_op,
+  eq_op,
+  not_eq_op,
+  less_op,
+  less_eq_op,
+  greater_op,
+  greater_eq_op
 };
 
 
@@ -121,6 +129,14 @@ op_name(Binary_op op)
     case div_op: return "/";
     case mul_op: return "*";
     case mod_op: return "%";
+    case lor_op: return "||";
+    case land_op: return "&&";
+    case eq_op: return "==";
+    case not_eq_op: return "!=";
+    case less_op: return "<";
+    case less_eq_op: return "<=";
+    case greater_op: return ">";
+    case greater_eq_op: return ">=";
   }
   return "error";
 }
