@@ -13,7 +13,7 @@ is_integer(Expr const* e)
 
 
 bool
-is_integer(Expr const* e)
+is_bool(Expr const* e)
 {
   return dynamic_cast<Bool_expr const*>(e);
 }
@@ -84,7 +84,13 @@ print(Binary_expr const* e)
 void
 print(Unary_expr const* e)
 {
-  std::cout << "-(";
+  switch (e->op()) {
+    case pos_op: std::cout << "+"; break;
+    case neg_op: std::cout << "-"; break;
+    case not_op: std::cout << "!"; break;
+  }
+  
+  std::cout << "(";
   print(e->operand());
   std::cout << ")";
 }

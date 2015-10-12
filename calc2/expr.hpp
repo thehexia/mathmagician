@@ -69,14 +69,17 @@ enum Unary_op
 // -/+/! (expr)
 struct Unary_expr : Expr
 {
-  Unary_expr(Expr const* e1)
-    : Expr(unary_expr), first(e1)
+  Unary_expr(Unary_op op, Expr const* e1)
+    : Expr(unary_expr), first(e1), second(op)
   { }
 
   Expr const* operand() const { return first; }
+  Unary_op op() const { return second; }
 
   Expr const* first;
+  Unary_op second;
 };
+
 
 // arithmetic operators
 enum Binary_op

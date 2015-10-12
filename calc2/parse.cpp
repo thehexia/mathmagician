@@ -34,6 +34,13 @@ Parser::on_binary(Token const* tok, Expr const* e1, Expr const* e2)
     case fslash_tok: return new Binary_expr(div_op, e1, e2);
     case mod_tok: return new Binary_expr(mod_op, e1, e2);
     case log_or_tok: return new Binary_expr(lor_op, e1, e2);
+    case log_and_tok: return new Binary_expr(land_op, e1, e2);
+    case eq_eq_tok: return new Binary_expr(eq_op, e1, e2);
+    case bang_eq_tok: return new Binary_expr(not_eq_op, e1, e2);
+    case less_tok: return new Binary_expr(less_op, e1, e2);
+    case less_eq_tok: return new Binary_expr(less_eq_op, e1, e2);
+    case great_tok: return new Binary_expr(greater_op, e1, e2);
+    case great_eq_tok: return new Binary_expr(greater_eq_op, e1, e2); 
     default:
       return nullptr;
   }
@@ -42,9 +49,15 @@ Parser::on_binary(Token const* tok, Expr const* e1, Expr const* e2)
 
 // Handles the negative operator
 Expr*
-Parser::on_unary(Expr const* e)
+Parser::on_unary(Token const* tok, Expr const* e)
 {
-  return new Unary_expr(e);
+  switch  (tok->kind()) {
+    case plus_tok: return new Unary_expr(pos_op, e);
+    case minus_tok: return new Unary_expr(neg_op, e);
+    case bang_tok: return new Unary_expr(not_op, e);
+  }
+
+  return nullptr;
 }
 
 
