@@ -39,7 +39,7 @@ int main(int argc, char* argv[])
 
     if(e) {
       // evaluate
-      double res = evaluate(e);
+      Value res = evaluate(e);
       std::cout << res << '\n';
     }
   } 

@@ -50,7 +50,7 @@ print(Number_expr const* e)
 void
 print(Bool_expr const* e)
 {
-  (e->value()) ? std::cout << "true" : std::cout << "false";
+  (e->val()) ? std::cout << "true" : std::cout << "false";
 }
 
 
@@ -93,6 +93,13 @@ print(Unary_expr const* e)
   std::cout << "(";
   print(e->operand());
   std::cout << ")";
+}
+
+
+void
+print(Value const& v)
+{
+  std::cout << v;
 }
 
 

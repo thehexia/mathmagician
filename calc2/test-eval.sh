@@ -1,8 +1,9 @@
-for file in $(ls cases/)
+
+for file in $(ls cases/$1*)
 do
 	printf "=========="$file"===========\n"
 	echo "Content: "; 
-	cat cases/$file
+	cat $file
 	printf "\n"
-	./build/test/test-eval cases/$file
+	./build/test/test-eval $file
 done

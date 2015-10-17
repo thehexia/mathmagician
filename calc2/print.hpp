@@ -2,6 +2,8 @@
 #define MATH_PRINT_HPP
 
 #include "expr.hpp"
+#include "type.hpp"
+#include "value.hpp"
 #include "token.hpp"
 
 
@@ -10,7 +12,8 @@ namespace math
 
 void print(Token const*);
 void print(Expr const*);
-void print(char const* c);
+void print(char const*);
+void print(Value const&);
 
 void error(char const* c);
 

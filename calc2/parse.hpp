@@ -11,8 +11,8 @@ namespace math
 struct Parser
 {
   // returns on expression from parsing 
-  Expr* on_binary(Token const*, Expr const*, Expr const*);
-  Expr* on_unary(Token const*, Expr const*);
+  Expr* on_binary(Token const*, Expr*, Expr*);
+  Expr* on_unary(Token const*, Expr*);
   Expr* on_number(Token const*);
   Expr* on_bool(Token const*);
 };

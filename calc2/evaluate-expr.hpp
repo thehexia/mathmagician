@@ -2,12 +2,14 @@
 #define MATH_EVAL_EXPR_HPP
 
 #include "expr.hpp"
+#include "type.hpp"
+#include "value.hpp"
 
 namespace math
 {
 
 // double for future decimal support
-double evaluate(Expr const* e);
+Value evaluate(Expr const* e);
 
 } // namespace math
 

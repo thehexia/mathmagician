@@ -177,7 +177,7 @@ parse_pos(Parser& p, Token_stream& ts)
   // eat the plus tok
   Token const* tok = ts.advance(); 
   assert(tok->kind() == plus_tok);
-  if (Expr* e = parse_primary_expr(p, ts))
+  if (Expr* e = parse_unary_expr(p, ts))
     return p.on_unary(tok, e);
 
   error("Expected primary expr after '+'.");
@@ -192,7 +192,7 @@ parse_not(Parser& p, Token_stream& ts)
   // eat the not tok
   Token const* tok = ts.advance(); 
   assert(tok->kind() == bang_tok);
-  if (Expr* e = parse_primary_expr(p, ts))
+  if (Expr* e = parse_unary_expr(p, ts))
     return p.on_unary(tok, e);
 
   error("Expected primary expr after '!'.");
@@ -296,7 +296,7 @@ parse_mult_expr(Parser& p, Token_stream& ts)
 Expr*
 parse_add_rest(Parser& p, Token_stream& ts, Token const* tok, Expr* e1)
 {
-  if (Expr const* e2 = parse_mult_expr(p, ts)) {
+  if (Expr* e2 = parse_mult_expr(p, ts)) {
     if (Token const* t = ts.next()) {
       // keep parsing the 'rest' while we still have a valid operator
       if (is_additive_op(t->kind()))
@@ -350,7 +350,7 @@ parse_add_expr(Parser& p, Token_stream& ts)
 Expr*
 parse_order_rest(Parser& p, Token_stream& ts, Token const* tok, Expr* e1)
 {
-  if (Expr const* e2 = parse_add_expr(p, ts)) {
+  if (Expr* e2 = parse_add_expr(p, ts)) {
     if (Token const* t = ts.next()) {
       // keep parsing the 'rest' while we still have a valid operator
       if (t->kind() == less_tok 
@@ -405,7 +405,7 @@ parse_order_expr(Parser& p, Token_stream& ts)
 Expr*
 parse_eq_rest(Parser& p, Token_stream& ts, Token const* tok, Expr* e1)
 {
-  if (Expr const* e2 = parse_order_expr(p, ts)) {
+  if (Expr* e2 = parse_order_expr(p, ts)) {
     if (Token const* t = ts.next()) {
       // keep parsing the 'rest' while we still have a valid operator
       if (t->kind() == eq_eq_tok || t->kind() == bang_eq_tok)
@@ -455,7 +455,7 @@ parse_eq_expr(Parser& p, Token_stream& ts)
 Expr*
 parse_log_and_rest(Parser& p, Token_stream& ts, Token const* tok, Expr* e1)
 {
-  if (Expr const* e2 = parse_eq_expr(p, ts)) {
+  if (Expr* e2 = parse_eq_expr(p, ts)) {
     if (Token const* t = ts.next()) {
       // keep parsing the 'rest' while we still have a valid operator
       if (t->kind() == log_and_tok)
@@ -504,7 +504,7 @@ parse_log_and_expr(Parser& p, Token_stream& ts)
 Expr*
 parse_log_or_rest(Parser& p, Token_stream& ts, Token const* tok, Expr* e1)
 {
-  if (Expr const* e2 = parse_log_and_expr(p, ts)) {
+  if (Expr* e2 = parse_log_and_expr(p, ts)) {
     if (Token const* t = ts.next()) {
       // keep parsing the 'rest' while we still have a valid operator
       if (t->kind() == log_or_tok)

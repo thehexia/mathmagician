@@ -1,6 +1,8 @@
 #ifndef MATH_EXPR_HPP
 #define MATH_EXPR_HPP
 
+#include "prelude.hpp"
+
 #include <iostream>
 
 namespace math
@@ -19,13 +21,16 @@ enum Expr_kind
 // Base Expr class
 struct Expr
 {
-  Expr(Expr_kind k) 
-    : kind(k)
+  Expr(Expr_kind k, Type* t) 
+    : kind(k), type_(t)
   { }
 
   virtual ~Expr() { };
 
+  Type const* type() const { return type_; }
+
   Expr_kind kind;
+  Type* type_; 
 };
 
 
@@ -34,8 +39,8 @@ struct Expr
 //  doubles
 struct Number_expr : Expr
 {
-  Number_expr(double n)
-    : Expr(number_expr), first(n)
+  Number_expr(double n, Type* t)
+    : Expr(number_expr, t), first(n)
   { }
 
   double val() const { return first; }
@@ -46,11 +51,11 @@ struct Number_expr : Expr
 
 struct Bool_expr : Expr
 {
-  Bool_expr(bool b)
-    : Expr(bool_expr), first(b)
+  Bool_expr(bool b, Type* t)
+    : Expr(bool_expr, t), first(b)
   { }
 
-  bool value() const { return first; }
+  bool val() const { return first; }
 
   bool first;
 };
@@ -69,14 +74,14 @@ enum Unary_op
 // -/+/! (expr)
 struct Unary_expr : Expr
 {
-  Unary_expr(Unary_op op, Expr const* e1)
-    : Expr(unary_expr), first(e1), second(op)
+  Unary_expr(Unary_op op, Expr* e1, Type* t)
+    : Expr(unary_expr, t), first(e1), second(op)
   { }
 
   Expr const* operand() const { return first; }
   Unary_op op() const { return second; }
 
-  Expr const* first;
+  Expr* first;
   Unary_op second;
 };
 
@@ -108,8 +113,8 @@ enum Binary_op
 // e1 % e2
 struct Binary_expr : Expr
 {
-  Binary_expr(Binary_op op, Expr const* e1, Expr const* e2)
-    : Expr(binary_expr), first(op), second(e1), third(e2)
+  Binary_expr(Binary_op op, Expr* e1, Expr* e2, Type* t)
+    : Expr(binary_expr, t), first(op), second(e1), third(e2)
   { }
 
   Binary_op op() const { return first; }
@@ -117,8 +122,8 @@ struct Binary_expr : Expr
   Expr const* rhs() const { return third; }
 
   Binary_op first;
-  Expr const* second;
-  Expr const* third;
+  Expr* second;
+  Expr* third;
 };
 
 
