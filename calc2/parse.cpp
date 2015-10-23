@@ -203,6 +203,10 @@ parse(Parser& p, Token_stream& tl)
   // if no expression was parse to begin with
   if (!e)
     error("Invalid expression at beginning of input.");
+  if (!tl.eof()) {
+    error("Unexpected tokens remaining in expression.");
+    return nullptr;
+  }
 
   return e;
 }
