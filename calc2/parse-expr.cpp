@@ -155,7 +155,7 @@ parse_primary_expr(Parser& p, Token_stream& ts)
 }
 
 
-// neg      ::= - unary expr
+// neg ::= - unary expr
 Expr*
 parse_neg(Parser& p, Token_stream& ts)
 {
@@ -185,7 +185,7 @@ parse_pos(Parser& p, Token_stream& ts)
 }
 
 
-// pos ::= ! unary expr
+// not ::= ! unary expr
 Expr*
 parse_not(Parser& p, Token_stream& ts)
 {
@@ -347,6 +347,7 @@ parse_add_expr(Parser& p, Token_stream& ts)
 }
 
 
+// order_rest := ... (< | <= | > | >=) add_expr (order_rest)
 Expr*
 parse_order_rest(Parser& p, Token_stream& ts, Token const* tok, Expr* e1)
 {
@@ -374,10 +375,10 @@ parse_order_rest(Parser& p, Token_stream& ts, Token const* tok, Expr* e1)
 }
 
 
-// order_expr < | <= | > | >= add_expr
-// add_expr
+// order_expr := order_expr (< | <= | > | >=) add_expr
+//               add_expr
 //
-// add_expr (order_rest)
+// order_expr := add_expr (order_rest)
 Expr*
 parse_order_expr(Parser& p, Token_stream& ts)
 {
@@ -402,6 +403,7 @@ parse_order_expr(Parser& p, Token_stream& ts)
 }
 
 
+// eq_rest := ... (== | !=) order_expr (eq_rest)
 Expr*
 parse_eq_rest(Parser& p, Token_stream& ts, Token const* tok, Expr* e1)
 {
@@ -426,10 +428,10 @@ parse_eq_rest(Parser& p, Token_stream& ts, Token const* tok, Expr* e1)
 }
 
 
-// eq_expr == | != order_expr
-// order_expr
+// eq_expr := eq_expr (== | !=) order_expr
+//            order_expr
 //
-// order_expr (eq_rest)
+// eq_expr := order_expr (eq_rest)
 Expr*
 parse_eq_expr(Parser& p, Token_stream& ts)
 {
@@ -452,6 +454,7 @@ parse_eq_expr(Parser& p, Token_stream& ts)
 }
 
 
+// log_and_rest := ... && equality_expr (log_and_rest)
 Expr*
 parse_log_and_rest(Parser& p, Token_stream& ts, Token const* tok, Expr* e1)
 {
@@ -476,10 +479,10 @@ parse_log_and_rest(Parser& p, Token_stream& ts, Token const* tok, Expr* e1)
 }
 
 
-// log_and_expr && equality_expr
-// equality_expr
+// log_and_expr := log_and_expr && equality_expr
+//                 equality_expr
 //
-// equality_expr (log_and_expr)
+// log_and_expr := equality_expr (log_and_expr)
 Expr*
 parse_log_and_expr(Parser& p, Token_stream& ts)
 {
@@ -500,7 +503,7 @@ parse_log_and_expr(Parser& p, Token_stream& ts)
   return nullptr;
 }
 
-
+// log_or_rest := ... || log_and_expr (log_or_rest)
 Expr*
 parse_log_or_rest(Parser& p, Token_stream& ts, Token const* tok, Expr* e1)
 {
@@ -525,10 +528,10 @@ parse_log_or_rest(Parser& p, Token_stream& ts, Token const* tok, Expr* e1)
 }
 
 
-// log_or_expr || log_and_expr
-// log_and_expr
+// log_or_expr := log_or_expr || log_and_expr
+//                log_and_expr
 //
-// log_and_expr (log_or_rest)
+// log_or_expr := log_and_expr (log_or_rest)
 Expr*
 parse_log_or_expr(Parser& p, Token_stream& ts)
 {
