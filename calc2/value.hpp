@@ -45,6 +45,8 @@ inline std::ostream& operator<<(std::ostream& os, Value const& v)
 {
   if (v.is_boolean()) return (v.get_bool()) ? os << "true" : os << "false";
   if (v.is_double()) return os << std::boolalpha << v.get_double();
+
+  return os << "<error value>";
 }
 
 #endif
